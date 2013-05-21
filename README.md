@@ -15,13 +15,15 @@ initializing is really easy
 	html5Notification.init();
 
 But if you want some configuration options you can use the current configuration list below:
+
 	The default settings
+
 	{
 		display_message: true,
 
 		message: {
-			supported_browser: 'Your browser does not support the Notification API.',
-			notsupported_browser: 'Your browser does support the Notification API.',
+			supported_browser: 'Your browser does support the Notification API.',
+			notsupported_browser: 'Your browser does not support the Notification API.',
 			permission_denied: 'You have denied access to display notifications.',
 		},
 
@@ -36,22 +38,25 @@ A little explanation about what everything does.
 	display_message: true OR false, On false no notification will be displayed.
 
 	message: {
-		supported_browser: 'Your browser does not support the Notification API.',
-		notsupported_browser: 'Your browser does support the Notification API.',
-		permission_denied: 'You have denied access to display notifications.',
+		supported_browser: Message for a supported browser of the Notification API,
+		notsupported_browser: Message for a not supported browser of the Notification API.,
+		permission_denied: Message if the user denied the use of the Notifications API,
 	},
 
 	field: {
-		container: $('body'),
-		browser_support: $('<div id="message" /></div>'),
+		container: Can be any jquery object,
+		browser_support: Can also be any jquery object,
 	},
+
 
 Creating a message
 ------------------
 Short type
+
 	html5Notification.create_message('Short version')
 
 With some extra options
+
 	html5Notification.create_message({
 		title: 'The Longer version',
 		body: 'A cool message with Nedap\'s logo',
