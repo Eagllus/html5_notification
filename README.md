@@ -1,6 +1,10 @@
 HTML5 Notification
 ==================
 
+During a project for [Nedap Healtcare](http://www.nedap-healthcare.com/) I wanted to use the<br />
+Web Notification API. So I decided that I would right a jQuery plugin that could be used to<br />
+use the Web Notification.<br />
+
 HTML5 Notification uses the [W3C Web Notification API](http://www.w3.org/TR/notifications/)<br />
 At the moment FireFox (v22 - beta) and Safari uses the current version of the W3C Notification.<br />
 Chrome still uses an older version on webkitNotification. (Still working on this)<br />
@@ -66,6 +70,9 @@ With some extra options
 Still working on
 ----------------
 
-* Autoload the init function on create_message call
 * Chromium compatibility
 * Internet Explorer compatibility
+
+This is my first plugin for jQuery. So if you have suggestions what I could fix or improve please<br />
+notify me about that!
+
