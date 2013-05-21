@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+<title>HTML5 Notification API Demo</title>
+<style type="text/css">
+.hidden {
+	display: none !important;
+}
+</style>
+</head>
+<body style="font-family: 'Lato', sans-serif; color: #444; font-size: 1.6em;">
+
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="jquery.html5_notification.js"></script>
+<script type="text/javascript">
+	// html5Notification.init();
+
+	// html5Notification.create_message('Default Title');
+
+	html5Notification.create_message({
+		title: 'The Title',
+		message: 'a cool message',
+		icon: 'http://www.studiokluif.nl/sites/default/files/Nedap_huisstijl_asterisk.jpg'
+	});
+
+
+	// new Notification("Meeting about to begin",
+ //                 { iconUrl: "calendar.gif",
+ //                   body: "Room 101",
+ //                 });
+</script>
+</body>
+</html>
