@@ -1,14 +1,20 @@
 (function($) {
 	var html5Notification = {
 		init: function ( options ) {
-			// Allow to override default options.
-			this.buildDefaults();
 
-			// Check browser support
-			if (this.check_browser_support() ) {
+			console.log(html5Notification.initialized)
 
-				// Supported, ask for permission
-				this.permissionHandler();
+			if ( typeof html5Notification.initialized === 'undefined' ) {
+				// Allow to override default options.
+				this.buildDefaults();
+
+				// Check browser support
+				if ( this.check_browser_support() ) {
+					// Supported, ask for permission
+					this.permissionHandler();
+				}
+
+				html5Notification.initialized = true;
 			}
 
 			return this;
@@ -19,9 +25,9 @@
 			// Check if we have permission (setting output to variable)
 			var checkPermission = this.check_permission();
 			
-			if ( checkPermission === true) {
+			if ( checkPermission === true ) {
 
-			} else if ( checkPermission === 'pending') {
+			} else if ( checkPermission === 'pending' ) {
 				this.request_permission();
 
 			} else {
@@ -37,8 +43,8 @@
 				display_message: 			true,
 
 				message: {
-					supported_browser:	    'Your browser does not support the Notification API.',
-					notsupported_browser: 	'Your browser does support the Notification API.',
+					supported_browser:	    'Your browser does support the Notification API.',
+					notsupported_browser: 	'Your browser does not support the Notification API.',
 					permission_denied: 	    'You have denied access to display notifications.',
 					permission_button: 		'Grant Permission To Display Notifications',
 				},
@@ -55,17 +61,17 @@
 		*/
 		check_browser_support: function() {
 			var supported = (Notification) ? true : false;
-			if (this.config.display_message === true) {
+			if ( this.config.display_message === true ) {
 				var browser_support = this.config.field.browser_support.appendTo(this.config.field.container);	
 
 				if( supported === true ) {
 					browser_support
 						.addClass("alert alert-success")
-						.text(this.config.message.notsupported_browser);
+						.text(this.config.message.supported_browser);
 				} else {
 					browser_support
 						.addClass("alert alert-error")
-						.text(this.config.message.supported_browser);
+						.text(this.config.message.notsupported_browser);
 				}
 			}
 
@@ -120,8 +126,8 @@
 		* TODO: Fix prevent losing of the current message
 		*/
 		create_message: function( options ) {
-			if (Notification.permission == 'granted') {
-				if ( typeof options === 'string') {
+			if ( Notification.permission == 'granted' ) {
+				if ( typeof options === 'string' ) {
 					var title = options,
 						config = {};
 				} else {
@@ -133,28 +139,14 @@
 
 			} else {
 				this.init();
-				// this.create_message(options);
+
+				// while (Notification.permission != 'granted') {
+				// 	sleep
+				// // this.create_message(options);
+				// }
 			}
 		}
 	};
-
-	/**
-	* Create a plain text notification box
-	*/
-	function plain_text_notification(image, title, content) {
-		if (window.webkitNotifications.checkPermission() == 0) {
-			return window.webkitNotifications.createNotification(image, title, content);
-		}
-	}
-
-	/**
-	* Create a notification box with html inside
-	*/
-	function html_notification(url) {
-		if (window.webkitNotifications.checkPermission() == 0) {
-			return window.webkitNotifications.createHTMLNotification(url);
-		}
-	}
 
 	window.html5Notification = html5Notification;
 })( jQuery);
