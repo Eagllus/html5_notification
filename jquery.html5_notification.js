@@ -3,18 +3,22 @@
 		init: function ( options ) {
 			this.df = $.Deferred();
 
-			if ( typeof html5Notification.initialized === 'undefined' ) {
-				// Allow to override default options.
-				this.buildDefaults();
-
-				// Check browser support
-				if ( this.check_browser_support() ) {
-					// Supported, ask for permission
-					this.permissionHandler();
-				}
-
-				html5Notification.initialized = true;
+			if ( typeof html5Notification.initialized !== 'undefined' ) {
+				return this.df.promise();
 			}
+
+			// Allow to override default options.
+			this.buildDefaults();
+
+			this.config = $.extend( {}, this.config, options );
+
+			// Check browser support
+			if ( this.check_browser_support() ) {
+				// Supported, ask for permission
+				this.permissionHandler();
+			}
+
+			html5Notification.initialized = true;
 
 			return this.df.promise();
 
