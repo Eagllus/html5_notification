@@ -1,8 +1,7 @@
 (function($) {
 	var html5Notification = {
 		init: function ( options ) {
-
-			console.log(html5Notification.initialized)
+			this.df = $.Deferred();
 
 			if ( typeof html5Notification.initialized === 'undefined' ) {
 				// Allow to override default options.
@@ -17,7 +16,7 @@
 				html5Notification.initialized = true;
 			}
 
-			return this;
+			return this.df.promise();
 
 		},
 
@@ -86,6 +85,7 @@
 				// We have permission to post notifications
 				case 0:
 				case 'granted':
+					this.df.resolve();
 					return true;
 					break;
 
@@ -112,6 +112,7 @@
 
 			Notification.requestPermission(function(){
 				self.permissionHandler();
+				self.df.resolve();
 			});
 		},
 
@@ -123,7 +124,6 @@
 		* If the permission is not already granted, the init function will be called.
 		* This will cause the current message to be losted.
 		*
-		* TODO: Fix prevent losing of the current message
 		*/
 		create_message: function( options ) {
 			if ( Notification.permission == 'granted' ) {
@@ -138,15 +138,14 @@
 				new Notification(title, config);
 
 			} else {
-				this.init();
-
-				// while (Notification.permission != 'granted') {
-				// 	sleep
-				// // this.create_message(options);
-				// }
+				var self = this;
+				self.init()
+					.done(function(){
+						self.create_message( options );
+					});
 			}
 		}
 	};
 
-	window.html5Notification = html5Notification;
+	$.html5Notification = html5Notification;
 })( jQuery);
