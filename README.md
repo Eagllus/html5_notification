@@ -3,7 +3,7 @@ HTML5 Notification
 
 HTML5 Notification uses the [W3C Web Notification API](http://www.w3.org/TR/notifications/)<br />
 At the moment FireFox (v22 - beta) and Safari uses the current version of the W3C Notification.<br />
-Chrome still uses an older versie on webkitNotification. (Still working on this)<br />
+Chrome still uses an older version on webkitNotification. (Still working on this)<br />
 Internet Explorer (v11) will support Notification. (Still working on this)<br />
 
 Link for more information about browser support [click here](http://caniuse.com/notifications).
