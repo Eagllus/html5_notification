@@ -45,13 +45,13 @@
 					supported_browser:	    'Your browser does support the Notification API.',
 					notsupported_browser: 	'Your browser does not support the Notification API.',
 					permission_denied: 	    'You have denied access to display notifications.',
-					permission_button: 		'Grant Permission To Display Notifications',
+					permission_button: 		'Grant permission to display notifications',
 				},
 
 				field: {
 					container: 				$('body'),
 					browser_support:		$('<div id="message" />'),
-					button: 				$('<button>Click to activate the permission request</button>')
+					button: 				$('<button />')
 				}
 			};
 		},
@@ -138,6 +138,7 @@
 
 				this.config.field.button
                		.appendTo(this.config.field.container)
+               		.text(this.config.message.permission_button)
 					.click(function() {
 						window.webkitNotifications.requestPermission(function(){
 							self.df.resolve();
