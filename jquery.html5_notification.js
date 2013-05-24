@@ -3,22 +3,20 @@
 		init: function ( options ) {
 			this.df = $.Deferred();
 
-			if ( typeof html5Notification.initialized !== 'undefined' ) {
-				return this.df.promise();
-			}
+			if ( typeof html5Notification.initialized === 'undefined' ) {
+                // Allow to override default options.
+                this.buildDefaults();
 
-			// Allow to override default options.
-			this.buildDefaults();
+                this.config = $.extend( {}, this.config, options );
 
-			this.config = $.extend( {}, this.config, options );
+                // Check browser support
+                if ( this.check_browser_support() ) {
+                	// Supported, ask for permission
+                    this.permissionHandler();
+                }
 
-			// Check browser support
-			if ( this.check_browser_support() ) {
-				// Supported, ask for permission
-				this.permissionHandler();
-			}
-
-			html5Notification.initialized = true;
+                html5Notification.initialized = true;
+            }
 
 			return this.df.promise();
 
@@ -27,13 +25,11 @@
 		permissionHandler: function() {
 			// Check if we have permission (setting output to variable)
 			var checkPermission = this.check_permission();
-			
-			if ( checkPermission === true ) {
-
-			} else if ( checkPermission === 'pending' ) {
+		
+			if ( checkPermission === 'pending' ) {
 				this.request_permission();
 
-			} else {
+			} else if ( checkPermission === false ) {
 				this.config.field.browser_support
 					.addClass("alert alert-error")
 					.text(this.config.message.permission_denied);
@@ -54,7 +50,8 @@
 
 				field: {
 					container: 				$('body'),
-					browser_support:		$('<div id="message" /></div>'),
+					browser_support:		$('<div id="message" />'),
+					button: 				$('<button>Click to activate the permission request</button>')
 				}
 			};
 		},
@@ -63,7 +60,13 @@
 		* Check if browser can support HTML5 Notifications
 		*/
 		check_browser_support: function() {
-			var supported = (Notification) ? true : false;
+			// This is a check specialy for Chromium if there is no Notification
+			// then check for webkitNotifications else we return false means 
+			// your browser doesn't support both types.
+			var supported = (Notification)
+				? true
+				: ( (webkitNotifications) ? true : false );
+
 			if ( this.config.display_message === true ) {
 				var browser_support = this.config.field.browser_support.appendTo(this.config.field.container);	
 
@@ -85,7 +88,14 @@
 		* Checks to see if HTML5 Notifications has permission
 		*/
 		check_permission: function() {
-			switch( Notification.permission ) {
+			// Check if you have permission already
+			// Second part is for chromium browsers
+			var permission = (Notification.permission)
+				? Notification.permission
+				: webkitNotifications.checkPermission();
+
+
+			switch( permission ) {
 				// We have permission to post notifications
 				case 0:
 				case 'granted':
@@ -114,10 +124,26 @@
 		request_permission: function () {
 			var self = this;
 
-			Notification.requestPermission(function(){
-				self.permissionHandler();
-				self.df.resolve();
-			});
+			// Because chrome needs a handler this ugly fix is inside the request permission function
+			// jQuery 1.9 no longer has the $.browser so this check looks for chrome in the browser agent.
+			var browserAgent = navigator.userAgent.toString().toLowerCase();
+			if ( browserAgent.indexOf('chrome') === -1 ) {
+
+				Notification.requestPermission(function(){
+					self.permissionHandler();
+					self.df.resolve();
+				});
+
+			} else {
+
+				this.config.field.button
+               		.appendTo(this.config.field.container)
+					.click(function() {
+						window.webkitNotifications.requestPermission(function(){
+							self.df.resolve();
+						});
+					});
+			}
 		},
 
 		/**
@@ -130,7 +156,12 @@
 		*
 		*/
 		create_message: function( options ) {
-			if ( Notification.permission == 'granted' ) {
+			// Do only a simple check to see if we have the right to show messages
+			var permission = (Notification.permission)
+				? Notification.permission
+				: webkitNotifications.checkPermission();
+
+			if ( permission === 0 || permission === 'granted' ) {
 				if ( typeof options === 'string' ) {
 					var title = options,
 						config = {};
