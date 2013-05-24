@@ -51,7 +51,21 @@
 				field: {
 					container: 				$('body'),
 					browser_support:		$('<div id="message" />'),
-					button: 				$('<button />')
+					button: 				$('<button />').css({
+						'border': '1px solid #ccc',
+						'padding': '4px 12px',
+						'font-size': '14px',
+						'line-height': '25px',
+						'cursor': 'pointer',
+						'background-color': '#f5f5f5',
+						'background-image': '-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6))',
+						'position': 'absolute',
+						'top': 0,
+						'left': 0,
+						'width': '100%',
+						'margin': 0,
+						'display': 'none'
+					})
 				}
 			};
 		},
@@ -139,10 +153,14 @@
 				this.config.field.button
                		.appendTo(this.config.field.container)
                		.text(this.config.message.permission_button)
+               		.slideDown(300, 'linear')
 					.click(function() {
+						$(this).remove();
+
 						window.webkitNotifications.requestPermission(function(){
 							self.df.resolve();
 						});
+
 					});
 			}
 		},
