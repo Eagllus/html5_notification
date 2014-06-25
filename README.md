@@ -7,7 +7,7 @@ So I decided that I would write a jQuery plugin that could be used to use the We
 HTML5 Notification uses the [W3C Web Notification API](http://www.w3.org/TR/notifications/)<br />
 At the moment FireFox and Safari uses the current version of the W3C Notification.<br />
 Chrome still uses an older version on webkitNotification.<br />
-Internet Explorer (v11) will support Notification. (Still working on this)<br />
+Internet Explorer is still not supporting Notification. (Will implement this when available)<br />
 
 Link for more information about browser support [click here](http://caniuse.com/notifications).
 
